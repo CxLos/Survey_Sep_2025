@@ -216,6 +216,40 @@ columns_to_order = ['Health', 'Mental', 'Stress', 'Physical',
                     # 'Impression', 'Expectation', 'Care'
                     ]
 
+len_health = len(df['Health'])
+sum_health = df['Health'].sum()
+health_score = sum_health / len_health
+health_score = round(health_score, 1)
+print(f'Health Ratings Sum: ', sum_health)
+print(f'Health Ratings Average: ', health_score)
+
+len_mental = len(df['Mental'])
+sum_mental = df['Mental'].sum()
+mental_score = sum_mental / len_mental
+mental_score = round(mental_score, 1)
+print(f'Mental Ratings Sum: ', sum_mental)
+print(f'Mental Ratings Average: ', mental_score)
+
+len_stress = len(df['Stress'])
+sum_stress = df['Stress'].sum()
+stress_score = sum_stress / len_stress
+stress_score = round(stress_score, 1)
+print(f'Stress Ratings Sum: ', sum_stress)
+print(f'Stress Ratings Average: ', stress_score)
+
+len_physical = len(df['Physical'])
+sum_physical = df['Physical'].sum()
+physical_score = sum_physical / len_physical
+physical_score = round(physical_score, 1)
+print(f'Physical Ratings Sum: ', sum_physical)
+print(f'Physical Ratings Average: ', physical_score)
+
+total_score = (health_score + mental_score + stress_score + physical_score) / 4
+total_score = round(total_score, 1)
+print(f'Total Score: ', total_score)
+
+# ==========================================
+
 for col in columns_to_order:
     df[col] = (
         df[col]
@@ -224,6 +258,18 @@ for col in columns_to_order:
         .replace(to_replace=["", "nan"], value="N/A") 
     )
     df[col] = pd.Categorical(df[col], categories=rating_order, ordered=True)
+
+star_mapping = {
+    '1': '⭐',
+    '1.5': '⭐⯨',  # full + half star
+    '2': '⭐⭐',
+    '2.5': '⭐⭐⯨',
+    '3': '⭐⭐⭐',
+    '3.5': '⭐⭐⭐⯨',
+    '4': '⭐⭐⭐⭐',
+    '4.5': '⭐⭐⭐⭐⯨',
+    '5': '⭐⭐⭐⭐⭐'
+}
 
 # Calculate start and end month indices for the quarter
 # all_months = [
@@ -1527,6 +1573,33 @@ app.layout = html.Div(
 
 # ============================ Rollups ========================== #
 
+
+
+html.Div(
+    className='score-row',
+    children=[
+        
+        html.Div(
+            className='rating_box',
+            children=[
+                html.Div(
+                    className='score-box',
+                    children=[
+                        html.H3(
+                            className='score-title',
+                            children=[
+                                html.Span(f'{report_month} Rating: ⭐⭐⭐'),
+                                html.Span('⯨', className='half-star-yellow'),
+                                html.Span(f'{total_score}'),
+                            ]
+                        ),
+                    ]
+                ),
+            ],    
+        ),
+    ]
+),
+
 html.Div(
     className='rollup-row',
     children=[
@@ -1818,45 +1891,35 @@ html.Div(
             className='graph-row',
             children=[
                 html.Div(
-                    className='graph-box',
+                    className='graph-container-2',
                     children=[
-                        dcc.Graph(
-                            className='graph',
-                            figure=health_fig
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph-box',
-                    children=[
-                        dcc.Graph(
-                            className='graph',
-                            figure=health_pie
-                        )
-                    ]
-                ),
-            ]
-        ),
-        
-        html.Div(
-            className='graph-row',
-            children=[
-                html.Div(
-                    className='graph-box',
-                    children=[
-                        dcc.Graph(
-                            className='graph',
-                            figure=stress_fig
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='graph-box',
-                    children=[
-                        dcc.Graph(
-                            className='graph',
-                            figure=stress_pie
-                        )
+                        html.H4(
+                            className='score-title',
+                            children=[f'Overall Health Rating: ⭐ {health_score}']
+                        ),
+                        html.Div(
+                            className='graph-container-3',
+                            children=[
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=health_fig
+                                        )
+                                    ]
+                                ),
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=health_pie
+                                        )
+                                    ]
+                                ),
+                            ]
+                        ),
                     ]
                 ),
             ]
@@ -1866,21 +1929,111 @@ html.Div(
             className='graph-row',
             children=[
                 html.Div(
-                    className='graph-box',
+                    className='graph-container-2',
                     children=[
-                        dcc.Graph(
-                            className='graph',
-                            figure=mental_fig
-                        )
+                        html.H4(
+                            className='score-title',
+                            children=[f'Overall Stress Rating: ⭐ {stress_score}']
+                        ),
+                        html.Div(
+                            className='graph-container-3',
+                            children=[
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=stress_fig
+                                        )
+                                    ]
+                                ),
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=stress_pie
+                                        )
+                                    ]
+                                ),
+                            ]
+                        ),
                     ]
                 ),
+            ]
+        ),
+        
+        html.Div(
+            className='graph-row',
+            children=[
                 html.Div(
-                    className='graph-box',
+                    className='graph-container-2',
                     children=[
-                        dcc.Graph(
-                            className='graph',
-                            figure=mental_pie
-                        )
+                        html.H4(
+                            className='score-title',
+                            children=[f'Overall Mental Rating: ⭐ {mental_score}']
+                        ),
+                        html.Div(
+                            className='graph-container-3',
+                            children=[
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=mental_fig
+                                        )
+                                    ]
+                                ),
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=mental_pie
+                                        )
+                                    ]
+                                ),
+                            ]
+                        ),
+                    ]
+                ),
+            ]
+        ),
+        
+        html.Div(
+            className='graph-row',
+            children=[
+                html.Div(
+                    className='graph-container-2',
+                    children=[
+                        html.H4(
+                            className='score-title',
+                            children=[f'Overall Physical Rating: ⭐ {physical_score}']
+                        ),
+                        html.Div(
+                            className='graph-container-3',
+                            children=[
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=physical_fig
+                                        )
+                                    ]
+                                ),
+                                html.Div(
+                                    className='graph-box',
+                                    children=[
+                                        dcc.Graph(
+                                            className='graph',
+                                            figure=physical_pie
+                                        )
+                                    ]
+                                ),
+                            ]
+                        ),
                     ]
                 ),
             ]
