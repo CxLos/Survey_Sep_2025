@@ -195,11 +195,36 @@ df.rename(
         'Are you a member of the HealthyCuts™ Program?': 'Healthy Cuts',
         'Are you a Movement is Medicine member?': 'MIM',
         'Are you interested in potential clinical trial opportunities?': 'Trials',
+        'Are you willing to complete a brief survey?': 'Decline',
         # ------------------------------------------------
         "What is your overall impression of the Black Men's Health Clinic?": 'Impression',
     },
     inplace=True
 )
+
+# =========================== Total Reviews ============================ #
+
+len_nav = len(df_2)
+print(f'Navigation Visits {report_month}:', len_nav)
+
+len_fh = len(df_3)
+# print(f'Findhelp Visits {current_month}: ', len_fh)
+
+total_reviews = len(df[df['Decline'] == 'Yes'])
+print(f'{report_month} Captured Surveys: ', total_reviews)
+
+declined = len(df[df['Decline'] == 'No'])
+print('Clients who declined surveys: ', declined)
+
+missing_reviews = len_nav - total_reviews - declined
+print(f'Clients didn\'t submit reviews {report_month}: ', missing_reviews)
+
+# --- Capture Rate --- # 
+capture_rate = (total_reviews / missing_reviews) * 100 
+capture_rate = round(capture_rate)
+# print(f'Capture Rate {report_month}: {capture_rate}%')
+
+# =========================== Ratings Analysis ============================ #
 
 # Define a standardized color palette for ratings 1 to 5
 rating_colors = {
@@ -215,6 +240,15 @@ rating_order = ['1', '2', '3', '4', '5']
 columns_to_order = ['Health', 'Mental', 'Stress', 'Physical', 
                     # 'Impression', 'Expectation', 'Care'
                     ]
+
+df = df[df['Decline'] == 'Yes'].copy()
+
+# print(df_rating.head(10))
+
+# for col in columns_to_order:
+#     df_rating[col] = pd.to_numeric(df_rating[col], errors='coerce')
+
+# print(df.head(10))
 
 len_health = len(df['Health'])
 sum_health = df['Health'].sum()
@@ -280,27 +314,6 @@ star_mapping = {
 # ]
 # start_month_idx = (quarter - 1) * 3
 # month_order = all_months[start_month_idx:start_month_idx + 3]
-
-# =========================== Total Reviews ============================ #
-
-total_reviews = len(df)
-# print(f'Total Client Reviews {current_month}: ', total_reviews)
-
-# --- Missing Reviews --- #
-len_nav = len(df_2)
-# print(f'Navigation Visits {current_month}: ', len_nav)
-len_fh = len(df_3)
-# print(f'Findhelp Visits {current_month}: ', len_fh)
-total_nav = len_nav + len_fh
-# print(f'Combined Visits {current_month}: ', total_nav)
-
-missing_reviews = total_nav - total_reviews
-# print(f'Clients didn\'t submit reviews {current_month}: ', missing_reviews)
-
-# --- Capture Rate --- # 
-capture_rate = (total_reviews / total_nav) * 100 
-capture_rate = round(capture_rate)
-# print(f'Capture Rate {current_month}: {capture_rate}%')
 
 # ------------------------ Health Issue ---------------------------- #
 
@@ -1612,7 +1625,7 @@ html.Div(
                     children=[
                         html.H3(
                             className='rollup-title',
-                            children=[f'{report_month} Reviews']
+                            children=[f'{report_month} Surveys Captured']
                         ),
                     ]
                 ),
@@ -1633,7 +1646,7 @@ html.Div(
                 ),
             ]
         ),
-        html.Div(
+                html.Div(
             className='rollup-box-tr',
             children=[
                 html.Div(
@@ -1641,7 +1654,7 @@ html.Div(
                     children=[
                         html.H3(
                             className='rollup-title',
-                            children=[f'{report_month} Reviews Not Captured']
+                            children=[f'{report_month} Surveys Declined']
                         ),
                     ]
                 ),
@@ -1653,7 +1666,7 @@ html.Div(
                             children=[
                                 html.H1(
                                 className='rollup-number',
-                                children=[missing_reviews]
+                                children=[declined]
                                 ),
                             ]
                         )
@@ -1675,11 +1688,10 @@ html.Div(
                     children=[
                         html.H3(
                             className='rollup-title',
-                            children=[f'{report_month} Capture Rate']
+                            children=[f'{report_month} Surveys Not Captured']
                         ),
                     ]
                 ),
-
                 html.Div(
                     className='circle-box',
                     children=[
@@ -1687,8 +1699,8 @@ html.Div(
                             className='circle-3',
                             children=[
                                 html.H1(
-                                className='rollup-number-2',
-                                children=[f'{capture_rate}%']
+                                className='rollup-number',
+                                children=[missing_reviews]
                                 ),
                             ]
                         )
@@ -1704,10 +1716,11 @@ html.Div(
                     children=[
                         html.H3(
                             className='rollup-title',
-                            children=[f'Placeholder']
+                            children=[f'{report_month} Capture Rate']
                         ),
                     ]
                 ),
+
                 html.Div(
                     className='circle-box',
                     children=[
@@ -1715,8 +1728,8 @@ html.Div(
                             className='circle-4',
                             children=[
                                 html.H1(
-                                className='rollup-number',
-                                children=['-']
+                                className='rollup-number-2',
+                                children=[f'{capture_rate}%']
                                 ),
                             ]
                         )

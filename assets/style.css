@@ -243,7 +243,7 @@ html, body {
   text-align: center;
 
   margin: 0px 0px 0px 0px;
- padding: 22px 5px 22px 5px;
+  padding: 22px 5px 22px 5px;
 
   border: 15px solid rgb(240, 208, 0);
   border-radius: 100px;
@@ -259,7 +259,7 @@ html, body {
   text-align: center;
 
   margin: 0px 0px 0px 0px;
-  padding: 33px 1px 33px 1px;
+  padding: 22px 5px 22px 5px;
 
   border: 15px solid rgb(240, 208, 0);
   border-radius: 100px;
@@ -275,7 +275,7 @@ html, body {
   text-align: center;
 
   margin: 0px 0px 0px 0px;
-  padding: 0px 6px 0px 6px;
+  padding: 22px 5px 22px 5px;
 
   border: 15px solid rgb(240, 208, 0);
   border-radius: 100px;
