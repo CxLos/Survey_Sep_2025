@@ -217,12 +217,12 @@ declined = len(df[df['Decline'] == 'No'])
 print('Clients who declined surveys: ', declined)
 
 missing_reviews = len_nav - total_reviews - declined
-print(f'Clients didn\'t submit reviews {report_month}: ', missing_reviews)
+print(f'Missed reviews {report_month}: ', missing_reviews)
 
 # --- Capture Rate --- # 
-capture_rate = (total_reviews / missing_reviews) * 100 
+capture_rate = (total_reviews + declined) / len_nav * 100
 capture_rate = round(capture_rate)
-# print(f'Capture Rate {report_month}: {capture_rate}%')
+print(f'{report_month} Capture Rate: {capture_rate}%')
 
 # =========================== Ratings Analysis ============================ #
 
@@ -254,33 +254,33 @@ len_health = len(df['Health'])
 sum_health = df['Health'].sum()
 health_score = sum_health / len_health
 health_score = round(health_score, 1)
-print(f'Health Ratings Sum: ', sum_health)
-print(f'Health Ratings Average: ', health_score)
+# print(f'Health Ratings Sum: ', sum_health)
+# print(f'Health Ratings Average: ', health_score)
 
 len_mental = len(df['Mental'])
 sum_mental = df['Mental'].sum()
 mental_score = sum_mental / len_mental
 mental_score = round(mental_score, 1)
-print(f'Mental Ratings Sum: ', sum_mental)
-print(f'Mental Ratings Average: ', mental_score)
+# print(f'Mental Ratings Sum: ', sum_mental)
+# print(f'Mental Ratings Average: ', mental_score)
 
 len_stress = len(df['Stress'])
 sum_stress = df['Stress'].sum()
 stress_score = sum_stress / len_stress
 stress_score = round(stress_score, 1)
-print(f'Stress Ratings Sum: ', sum_stress)
-print(f'Stress Ratings Average: ', stress_score)
+# print(f'Stress Ratings Sum: ', sum_stress)
+# print(f'Stress Ratings Average: ', stress_score)
 
 len_physical = len(df['Physical'])
 sum_physical = df['Physical'].sum()
 physical_score = sum_physical / len_physical
 physical_score = round(physical_score, 1)
-print(f'Physical Ratings Sum: ', sum_physical)
-print(f'Physical Ratings Average: ', physical_score)
+# print(f'Physical Ratings Sum: ', sum_physical)
+# print(f'Physical Ratings Average: ', physical_score)
 
 total_score = (health_score + mental_score + stress_score + physical_score) / 4
 total_score = round(total_score, 1)
-print(f'Total Score: ', total_score)
+# print(f'Total Score: ', total_score)
 
 # ==========================================
 
